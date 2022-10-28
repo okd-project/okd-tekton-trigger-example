@@ -1,0 +1,39 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: okd-trigger-example-template
+  namespace: okd-team
+spec:
+  params:
+  - name: git-repo-url
+    description: The git repository url
+  - name: git-hash
+    description: The git commit hash
+  - name: git-repo-name
+    description: The name of the deployment to be created / patched
+  - name: git-actor-name
+    description: The full name of the user who commited the change
+
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: okd-trigger-pr-$(tt.params.git-repo-name)-
+      namespace: okd-team
+    spec:
+      params:
+        - name: git-hash
+          value: $(tt.params.git-hash)
+        - name: git-repo-url
+          value: $(tt.params.git-repo-url)
+        - name: git-actor-name
+          value: $(tt.params.git-actor-name)
+        - name: git-repo-name
+          value: $(tt.params.git-repo-name)
+      pipelineRef:
+        name: okd-trigger-example-pipeline
+      serviceAccountName: pipeline
+      workspaces:
+        - name: shared-workspace
+          persistentVolumeClaim:
+            claimName: manual-pvc

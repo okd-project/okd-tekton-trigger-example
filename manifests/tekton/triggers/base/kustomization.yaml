@@ -1,0 +1,10 @@
+namePrefix: 
+
+bases:
+  - trigger-template.yaml
+  - trigger-binding.yaml
+  - eventlistener.yaml
+  
+
+
+

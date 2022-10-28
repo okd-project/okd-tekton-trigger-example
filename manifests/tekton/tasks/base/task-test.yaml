@@ -1,0 +1,101 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: okd-trigger-example-test 
+  namespace: okd-team
+spec:
+  params:
+  - name: git-repo-url
+    description: The repo url
+    type: string
+  - name: git-repo-name
+    description: repo name
+    type: string
+  - name: git-hash
+    description: repo commit hash
+    type: string
+  - name: base-image-registry
+    description: base registry image to push to
+    type: string
+    default: BASE_REGISTRY
+  - name: tag-version
+    description: tag version
+    type: string
+    default: TAG_VERSION
+ 
+  workspaces:
+  - name: src
+      
+  steps: 
+  - name: clean
+    image: quay.io/okd/go-bundle-tools:v1.0.1
+    resources:
+      limits:
+        cpu: 250m
+        memory: 1000Mi
+      requests:
+        cpu: 250m
+        memory: 1000Mi
+    workingDir: /workspace/src/$(params.git-repo-name)
+    command: ["make"]
+    args: ["clean"]
+    
+  - name: verify
+    image: quay.io/okd/go-bundle-tools:v1.0.1
+    resources:
+      limits:
+        cpu: 250m
+        memory: 1000Mi
+      requests:
+        cpu: 250m
+        memory: 1000Mi
+    workingDir: /workspace/src/$(params.git-repo-name)
+    command: ["make"]
+    args: ["verify"]
+    
+  - name: unit-test
+    image: quay.io/okd/go-bundle-tools:v1.0.1
+    resources:
+      limits:
+        cpu: 250m
+        memory: 1000Mi
+      requests:
+        cpu: 250m
+        memory: 1000Mi
+    workingDir: /workspace/src/$(params.git-repo-name)
+    command: ["make"]
+    args: ["test"]
+
+  - name: build
+    image: quay.io/okd/go-bundle-tools:v1.0.1
+    resources:
+      limits:
+        cpu: 400m
+        memory: 2000Mi
+      requests:
+        cpu: 400m
+        memory: 2000Mi
+    workingDir: /workspace/src/$(params.git-repo-name)
+    command: ["make"]
+    args: ["build"]
+
+  - name: container-build-and-push
+    workingDir: /workspace/src/$(params.git-repo-name)
+    image:  gcr.io/kaniko-project/executor:latest
+    resources:
+      limits:
+        cpu: 400m
+        memory: 2000Mi
+      requests:
+        cpu: 400m
+        memory: 2000Mi
+    command: ["/kaniko/executor"]
+    args: ["--dockerfile=/workspace/src/$(params.git-repo-name)/Dockerfile","--context=/workspace/src/$(params.git-repo-name)/","--destination=$(params.base-image-registry)/$(params.git-repo-name):$(params.tag-version)"]
+    volumeMounts:
+    - name: docker-config
+      mountPath: /kaniko/.docker/
+
+  volumes:
+  - name: docker-config
+    configMap:
+      name: docker-config

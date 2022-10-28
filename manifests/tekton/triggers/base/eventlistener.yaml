@@ -1,0 +1,13 @@
+apiVersion: triggers.tekton.dev/v1alpha1 
+kind: EventListener 
+metadata:
+  name: okd-trigger-example
+  namespace: okd-team
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - name: okd-trigger-example-build
+      bindings:
+        - ref: okd-trigger-example-binding
+      template: 
+        ref: okd-trigger-example-template
