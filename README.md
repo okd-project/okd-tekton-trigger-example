@@ -22,8 +22,6 @@ The diagram below shows the architecture of a typical trigger and the one used i
 
 ## Installation
 
-During the installation, some of the steps are specific to a regular Kubernetes cluster, while others are specific to Kind clusters. 
-
 ### Install Tekton Operator
 
 Install the tekton cli and tekton resources before continuing (see https://tekton.dev/docs/pipelines/install)
@@ -50,7 +48,7 @@ kubectl create ns okd-team
 # assume you are logged into your kubernetes cluster
 # change the values of the default variables in
 # environments/overlays/cicd/patches/patch-envars.yaml
-# BASE_REGISTRY -> quay.io/okd and TAG_VERION -> v0.0.1 (as an example) 
+# BASE_REGISTRY -> quay.io/okd and TAG_VERSION -> v0.0.1 (as an example) 
 kubectl apply -k environments/overlays/cicd
 
 # check that all resources have deployed
@@ -98,5 +96,7 @@ The example has the PR_MERGED_URL enabled i.e.
 
 ```http://el-okd-trigger-example.okd-team.svc.cluster.local:8080``` 
 
-and so the pipeline will only be started on a mergeed PR
+and so the pipeline will only be started on a merged PR
 
+The gitweb-hook repo is [here](https://github.com/luigizuccarelli/golang-gitwebhook-service),
+please fork and change as you please. Also PR's are welcome
