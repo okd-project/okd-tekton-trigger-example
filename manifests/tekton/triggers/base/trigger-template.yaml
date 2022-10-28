@@ -36,4 +36,4 @@ spec:
       workspaces:
         - name: shared-workspace
           persistentVolumeClaim:
-            claimName: manual-pvc
+            claimName: PVC_NAME

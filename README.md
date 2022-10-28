@@ -38,7 +38,7 @@ git clone git@github.com:okd-project/okd-tekton-trigger-example
 
 Execute the following commands 
 
-**N.B** - change the variables in the patch-envars.yaml file before commencing (as in the comments below)
+**N.B** - change the variables in the patch-envars.yaml and patch-pvc.yaml files before commencing (as in the comments below)
 
 ```bash
 cd okd-tekton-trigger-example
@@ -46,9 +46,14 @@ cd okd-tekton-trigger-example
 kubectl create ns okd-team
 
 # assume you are logged into your kubernetes cluster
-# change the values of the default variables in
+
+# change the values of the default variables 
+# as in the following example
 # environments/overlays/cicd/patches/patch-envars.yaml
-# BASE_REGISTRY -> quay.io/okd and TAG_VERSION -> v0.0.1 (as an example) 
+# - BASE_REGISTRY -> quay.io/okd 
+# - TAG_VERSION -> v0.0.1 
+# environments/overlays/cicd/patches/patch-pvc.yaml
+# - PVC_NAME -> manual-pvc 
 kubectl apply -k environments/overlays/cicd
 
 # check that all resources have deployed

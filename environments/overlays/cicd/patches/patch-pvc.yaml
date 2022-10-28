@@ -1,0 +1,5 @@
+- op: replace
+  # Replace PVC
+  path: "/spec/resourcetemplates/0/spec/workspaces/0/persistentVolumeClaim/claimName"
+  value: 
+    PVC_NAME

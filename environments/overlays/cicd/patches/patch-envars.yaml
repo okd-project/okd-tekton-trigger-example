@@ -1,12 +1,13 @@
 - op: replace
- # Replace BASE_REGISTRY
+  # Replace BASE_REGISTRY
   path: "/spec/params/3/default"
   value:
     BASE_REGISTRY 
 
 - op: replace
- # Replace TAG_VERSION
+  # Replace TAG_VERSION
   path: "/spec/params/4/default"
   value:
     TAG_VERSION
+
 

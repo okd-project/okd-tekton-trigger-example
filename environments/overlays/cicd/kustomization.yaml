@@ -14,4 +14,10 @@ patchesJson6902:
     name: okd-trigger-example-test
     version: v1beta1
 
+- path: patches/patch-pvc.yaml
+  target:
+    group: triggers.tekton.dev
+    kind: TriggerTemplate
+    name: okd-trigger-example-template
+    version: v1alpha1
 
